@@ -1,0 +1,28 @@
+digraph triage {
+    node [shape=rect];
+
+    can_install [label="Install succeeded?"];
+    install_succeeded [label="yes"];
+    install_failed [label="no"];
+    can_import [label="import firedrake?"];
+    venv_activated [label="venv activated?"];
+    install_script_up_to_date [label="Install script up to date?"];
+    using_anaconda [label="Using Anaconda?"];
+    python_version [label="Python 3.5?"];
+
+    activate_venv [label="Activate the venv first."];
+    uninstall_anaconda [label="Get rid of Anaconda."];
+    update_python [label="Get Python 3.6+"];
+    update_install_script [label="Fetch new install script"];
+
+    can_install -> install_succeeded;
+    install_succeeded -> can_import;
+    can_import -> venv_activated [label="no"];
+    venv_activated -> activate_venv [label="no"];
+
+    can_install -> install_failed;
+    install_failed -> {install_script_up_to_date, using_anaconda, python_version};
+    install_script_up_to_date -> update_install_script [label="no"];
+    python_version -> update_python [label="no"];
+    using_anaconda -> uninstall_anaconda [label="yes"];
+}
