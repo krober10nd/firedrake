@@ -1420,6 +1420,8 @@ values from f.)"""
         if self.variable_layers:
             raise NotImplementedError("Cell location not implemented for variable layers")
         x = np.asarray(x, dtype=utils.ScalarType)
+        if x.size != self.geometric_dimension():
+            raise ValueError("Point coordinate dimension does not match mesh geometric dimension")
         X = np.empty_like(x)
         cell = self._c_locator(tolerance=tolerance)(self.coordinates._ctypes,
                                                     x.ctypes.data_as(ctypes.POINTER(ctypes.c_double)),
