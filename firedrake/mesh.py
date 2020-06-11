@@ -1914,6 +1914,10 @@ def VertexOnlyMesh(mesh, vertexcoords):
 
         self.__init__(coordinates)
 
+        # Save vertex reference coordinate (within reference cell) in function
+        reference_coordinates_fs = functionspace.VectorFunctionSpace(self, "DG", 0, dim=tdim)
+        self.reference_coordinates = dmcommon.fill_reference_coordinates_function(function.Function(reference_coordinates_fs))
+
     vmesh._callback = callback
     return vmesh
 
