@@ -179,8 +179,13 @@ def make_interpolator(expr, V, subset, access):
 
 @utils.known_pyop2_safe
 def _interpolator(V, tensor, expr, subset, arguments, access):
+    from finat.fiat_elements import FiatElement
+    from tsfc.finatinterface import create_element as create_finat_element
     try:
-        to_element = create_element(V.ufl_element(), vector_is_mixed=False)
+        element = create_finat_element(V.ufl_element())
+        # FInAT dual evaluation currently only accepts FiatElements
+        if not isinstance(element, FiatElement):
+            element = create_element(V.ufl_element(), vector_is_mixed=False)
     except KeyError:
         # FInAT only elements
         raise NotImplementedError("Don't know how to create FIAT element for %s" % V.ufl_element())
@@ -202,17 +207,18 @@ def _interpolator(V, tensor, expr, subset, arguments, access):
     if not isinstance(expr, firedrake.Expression):
         if expr.ufl_domain() and expr.ufl_domain() != V.mesh():
             raise NotImplementedError("Interpolation onto another mesh not supported.")
-        ast, oriented, needs_cell_sizes, coefficients, _ = compile_expression_dual_evaluation(expr, to_element, coords, coffee=False)
+        ast, oriented, needs_cell_sizes, coefficients, _ = compile_expression_dual_evaluation(expr, element, coords, coffee=False)
         kernel = op2.Kernel(ast, ast.name)
     elif hasattr(expr, "eval"):
         to_pts = []
-        for dual in to_element.dual_basis():
+        # FInAT dual evaluation currently only accepts FiatElements
+        for dual in (element._element.dual_basis() if isinstance(element, FiatElement) else element.dual_basis()):
             if not isinstance(dual, FIAT.functional.PointEvaluation):
                 raise NotImplementedError("Can only interpolate Python kernels with Lagrange elements")
             pts, = dual.pt_dict.keys()
             to_pts.append(pts)
 
-        kernel, oriented, needs_cell_sizes, coefficients = compile_python_kernel(expr, to_pts, to_element, V, coords)
+        kernel, oriented, needs_cell_sizes, coefficients = compile_python_kernel(expr, to_pts, element, V, coords)
     else:
         raise RuntimeError("Attempting to evaluate an Expression which has no value.")
 
