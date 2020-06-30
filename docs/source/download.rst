@@ -84,7 +84,14 @@ virtual environment was created.
 System requirements
 -------------------
 
-The installation script is tested on Ubuntu and MacOS X. Installation
+Firedrake requires Python 3.6 or later. The installation script is
+tested on Ubuntu and MacOS X. On Ubuntu 18.04 or later, the system
+installed Python 3 is supported and tested. On MacOS, the homebrew_
+installed Python 3 is supported and tested::
+
+  brew install python3
+
+Installation
 is likely to work well on other Linux platforms, although the script
 may stop to ask you to install some dependency packages. Installation
 on other Unix platforms may work but is untested. On Linux systems
@@ -110,26 +117,38 @@ Windows Subsystem for Linux. There are more detailed
 Installation on previous versions of Windows is unlikely to work.
 
 
-Supported Python distributions
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+System anti-requirements
+~~~~~~~~~~~~~~~~~~~~~~~~
 
-Firedrake requires Python 3.6 or later.
+We strive to make Firedrake work on as many platforms as we can. Some
+tools, however, make this challenging or impossible for end users.
 
-On Ubuntu (18.04 or later), the system installed Python 3 is supported and tested.
+**Anaconda.** The Anaconda Python distribution and package manager are
+often recommended in introductory data science courses because it does
+effectively handle many aggravating problems of dependency management.
+Unfortunately, Anaconda does a poor job of isolating itself from the
+rest of your system and assumes that it will be both the only Python
+installation and the only supplier of any dependent packages. Anaconda
+will install compilers and MPI compiler wrappers and put its compilers
+right at the top of your `PATH`. This is a problem because Firedrake
+builds and installs its own MPI, which Firedrake keeps isolated from
+the rest of your system through virtual environments. When installed
+on a platform with Anaconda, Firedrake can inadvertently try to link
+to the Anaconda installation of MPI, which causes problems.
 
-On Mac OS, the homebrew_ installed Python 3 is supported and tested::
+There are three ways around this. First, you can remove Anaconda.
+Second, you can modify your `PATH` environment variable to remove any
+traces of Anaconda, then install Firedrake. You can then re-enable
+Anaconda with a shell script that will add the relevant directories
+back onto your path. Finally, you can use a tool like pyenv_.
 
-  brew install python3
+**MacOS system Python.** The official MacOS installer on the Python
+website does not have a working SSL by default. A working SSL is
+necessary to securely fetch dependent packages from the internet. You
+can enable SSL with the system Python, but we strongly recommend using
+the version Python installed via Homebrew instead.
 
-If instead you choose to install Python 3 using the official Mac OS
-installer on the Python website, you need to be aware that that
-installation will not have a working SSL by default. You need to
-follow the SSL certificate instructions given in the installation process (or in
-``/Applications/Python X.X/ReadMe.rtf`` after installation).
-
-Additional considerations for MacPorts users
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
+**MacPorts.**
 Mac OS has multiple competing package managers which sometimes cause
 issues for users attempting to install Firedrake. In particular, the
 assembler provided by MacPorts is incompatible with the Mac system
@@ -220,3 +239,4 @@ packages for which these are also dependencies.
 .. _venv: https://docs.python.org/3/tutorial/venv.html
 .. _homebrew: https://brew.sh/
 .. _PETSc: https://www.mcs.anl.gov/petsc/
+.. _pyenv: https://github.com/pyenv/pyenv
