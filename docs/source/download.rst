@@ -93,11 +93,10 @@ installed Python 3 is supported and tested::
 
   brew install python3
 
-Installation
-is likely to work well on other Linux platforms, although the script
-may stop to ask you to install some dependency packages. Installation
-on other Unix platforms may work but is untested. On Linux systems
-that do not use the Debian package management system, it will be
+Installation is likely to work well on other Linux platforms, although
+the script may stop to ask you to install some dependency packages.
+Installation on other Unix platforms may work but is untested. On Linux
+systems that do not use the Debian package management system, it will be
 necessary to pass the `--no-package-manager` option to the install
 script. In this case, it is the user's responsibilty to ensure that
 they have the system dependencies:
@@ -153,7 +152,7 @@ There are three ways to work around this problem.
 website does not have a working SSL by default. A working SSL is
 necessary to securely fetch dependent packages from the internet. You
 can enable SSL with the system Python, but we strongly recommend using
-the version Python installed via Homebrew instead.
+a Python version installed via Homebrew instead.
 
 **MacPorts.**
 Mac OS has multiple competing package managers which sometimes cause
