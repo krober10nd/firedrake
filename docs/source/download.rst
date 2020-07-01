@@ -132,17 +132,22 @@ Unfortunately, Anaconda does a poor job of isolating itself from the
 rest of your system and assumes that it will be both the only Python
 installation and the only supplier of any dependent packages. Anaconda
 will install compilers and MPI compiler wrappers and put its compilers
-right at the top of your `PATH`. This is a problem because Firedrake
-builds and installs its own MPI, which Firedrake keeps isolated from
-the rest of your system through virtual environments. When installed
-on a platform with Anaconda, Firedrake can inadvertently try to link
-to the Anaconda installation of MPI, which causes problems.
+right at the top of your ``PATH``. This is a problem because Firedrake
+needs to build and use its own MPI. (We keep our MPI isolated from the
+rest of your system through virtual environments.) When installed on a
+platform with Anaconda, Firedrake can accidentally try to link to the
+incompatible Anaconda installation of MPI.
 
-There are three ways around this. First, you can remove Anaconda.
-Second, you can modify your `PATH` environment variable to remove any
-traces of Anaconda, then install Firedrake. You can then re-enable
-Anaconda with a shell script that will add the relevant directories
-back onto your path. Finally, you can use a tool like pyenv_.
+There are three ways to work around this problem.
+
+1. Remove Anaconda entirely.
+2. Modify your ``PATH`` environment variable to remove any traces of
+   Anaconda, then install Firedrake. If you need Anaconda later, you
+   can re-enable it with a shell script that will add those directories
+   back onto your path.
+3. Use a tool like pyenv_, which makes it possible to switch between
+   different versions of Python on a per-terminal session or per-
+   directory basis.
 
 **MacOS system Python.** The official MacOS installer on the Python
 website does not have a working SSL by default. A working SSL is
