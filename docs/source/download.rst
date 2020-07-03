@@ -36,12 +36,17 @@ use Firedrake::
 Testing the installation
 ------------------------
 
-It is recommended to run the test suite after installation to check
-that the Firedrake installation is fully functional.  Activate the
-venv_ as above and then run::
+We recommend that you run the test suite after installation to check
+that Firedrake is fully functional. Activate the venv_ as above and
+then run::
 
   cd firedrake/src/firedrake
-  make alltest
+  make test_demos
+
+This will run all of the Firedrake demo codes, which exercise most of
+the functionality of the library. The demos should take about 10-20
+minutes to run. If these fail to run for any reason, please see the
+section below on how to diagnose and debug a failed installation.
 
 .. note::
 
