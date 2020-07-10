@@ -27,7 +27,6 @@ pipeline {
         dir('tmp') {
           timestamps {
             sh '../scripts/firedrake-install --disable-ssh --minimal-petsc --slepc --documentation-dependencies --install thetis --install gusto --install icepack --no-package-manager --package-branch loopy cvec --package-branch PyOP2 vectorisation || (cat firedrake-install.log && /bin/false)'
-            
           }
         }
       }
