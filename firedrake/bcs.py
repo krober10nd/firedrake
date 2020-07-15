@@ -343,7 +343,7 @@ class DirichletBC(BCBase, DirichletBCMixin):
         elif isinstance(g, ufl.classes.Expr):
             try:
                 self._function_arg = function.Function(self.function_space()).interpolate(g)
-            except NotImplementedError:
+            except (NotImplementedError, AttributeError):
                 # Element doesn't implement interpolation
                 self._function_arg = function.Function(self.function_space()).project(g)
         else:
